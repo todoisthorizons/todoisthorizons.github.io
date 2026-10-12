@@ -151,6 +151,7 @@
       if (response.ok && data.success) {
         recordSubmission(now);
         showThanks();
+        document.dispatchEvent(new CustomEvent('horizons:form-sent', { detail: 'goodbye' }));
       } else {
         setStatus('Your feedback couldn\u2019t be sent. Please try again later.', 'error');
       }

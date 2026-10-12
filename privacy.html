@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src https://api.web3forms.com; form-action https://api.web3forms.com; object-src 'none'; base-uri 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src https://api.web3forms.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; worker-src 'self' blob:; form-action https://api.web3forms.com; object-src 'none'; base-uri 'self'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
+  <script src="analytics.js?v=20261013-a" defer></script>
   <title>Privacy Policy: Horizons for Todoist</title>
   <meta name="description" content="Privacy Policy for Horizons for Todoist browser extension, including information about data collection, use, storage, sharing, and retention.">
   <link rel="stylesheet" href="style.css?v=20261005-k">
@@ -61,7 +62,7 @@
   <main class="legal-page-container">
     <div class="legal-header page-intro">
       <h1>Privacy Policy</h1>
-      <p class="lead">Last updated: October 4, 2026</p>
+      <p class="lead">Last updated: October 13, 2026</p>
     </div>
 
     <div class="legal-card">
@@ -83,6 +84,9 @@
       <p>
         Website theme and contact-form rate-limit preferences are stored in your browser's <code>localStorage</code>. The extension also stores its installation date locally to calculate an approximate days-installed value for the uninstall feedback page; only the extension version and calculated day count are included in that page's URL.
       </p>
+      <p>
+        Website analytics also uses localStorage for generated visitor and session identifiers. Website and extension analytics use the same PostHog project, with events labeled by surface; this does not automatically link your website visits to your extension identity.
+      </p>
       </section>
 
       <section class="legal-section scroll-reveal">
@@ -99,12 +103,17 @@
       </p>
       </section>
 
-      <section class="legal-section legal-section--work-in-progress scroll-reveal">
-      <h2>4. Analytics and Tracking <span class="work-in-progress-badge">WORK IN PROGRESS</span></h2>
+      <section class="legal-section scroll-reveal">
+      <h2>4. Analytics and Session Replay</h2>
       <p>
-        Analytics are a work in progress and are not currently included. This section will be updated with details before analytics are introduced. We do not monitor the websites you visit or sell your data.
+        This website uses PostHog's EU service to collect pageviews, traffic-source information, browser and device metadata, clicks and interactions, and session recordings. Recordings reproduce page structure, changes, scrolling, and interactions to help us understand use and improve the website. Install-button clicks and confirmed form submissions are tracked separately; an install-button click does not confirm an installation.
       </p>
-      <p class="work-in-progress-note"><strong>Developer note:</strong> Replace this placeholder with the final analytics and tracking details before enabling analytics.</p>
+      <p>
+        Website form input values are masked in recordings and excluded from automatic interaction capture. Names, email addresses, messages, and feedback text are not included in our custom analytics events. Network request and response bodies and headers, and console logs, are not recorded. Captured navigation URLs omit query strings and fragments; campaign attribution may be collected separately. Masking is not a guarantee that every possible piece of personal information on a page can be detected.
+      </p>
+      <p>
+        The extension also sends enabled usage analytics, error diagnostics, and session recordings to PostHog. Its analytics toggle controls extension collection, not website collection. Extension recordings cover Todoist and extension pages with selective masking of goal names, recognized task and project names, and passwords; other visible content can remain in recordings. We do not sell your data. See <a href="https://posthog.com/privacy" target="_blank" rel="noopener">PostHog's privacy policy</a> for information about the provider.
+      </p>
       </section>
 
       <section class="legal-section scroll-reveal">
@@ -126,6 +135,7 @@
         <li>You can delete individual backups in the extension's Backup Manager or remove the Horizons project from Todoist.</li>
         <li>Turning sync or backups off stops new writes but does not delete existing Todoist data. Automatic backups keep the 14 newest snapshots; manual backups remain until deleted.</li>
         <li>Web3Forms processes submitted form data under its own privacy practices and retention policies.</li>
+        <li>Analytics and recordings are retained according to the PostHog project's settings. Clearing browser storage or uninstalling the extension does not delete data already sent to PostHog. Contact us regarding deletion requests.</li>
       </ul>
       </section>
 

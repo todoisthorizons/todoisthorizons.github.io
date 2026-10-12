@@ -126,6 +126,7 @@
         recordSubmission(now);
         form.reset();
         setStatus('Thanks! Your message has been sent. We\u2019ll get back to you soon.', 'success');
+        document.dispatchEvent(new CustomEvent('horizons:form-sent', { detail: 'contact' }));
       } else {
         setStatus('Your message couldn\u2019t be sent. Please try again later.', 'error');
       }
