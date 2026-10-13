@@ -13,7 +13,11 @@ function fixture({ hostname = 'todoisthorizons.github.io', protocol = 'https:', 
   const captured = [];
   const warnings = [];
   let config;
-  class Element {}
+  class Element {
+    closest() { return null; }
+    matches() { return false; }
+    getAttribute() { return null; }
+  }
   const sdk = {
     init: (token, options) => {
       assert.match(token, /^phc_/);
@@ -22,17 +26,48 @@ function fixture({ hostname = 'todoisthorizons.github.io', protocol = 'https:', 
     },
     capture: (name, properties) => captured.push({ name, properties }),
   };
-  const window = { posthog: sdk, HORIZONS_ANALYTICS_TEST: testing };
+  const windowListeners = {};
+  const window = {
+    posthog: sdk,
+    HORIZONS_ANALYTICS_TEST: testing,
+    addEventListener: (name, listener) => {
+      windowListeners[name] ||= [];
+      windowListeners[name].push(listener);
+    },
+    innerHeight: 800,
+    scrollY: 0,
+  };
+  const dispatchDoc = (name, event) => {
+    const list = listeners[name] || [];
+    for (const fn of list) fn(event);
+  };
   vm.runInNewContext(source, {
     window, location: { hostname, protocol }, URL, Element,
     console: { warn: (...args) => warnings.push(args) },
     document: {
-      addEventListener: (name, listener) => { listeners[name] = listener; },
+      documentElement: { scrollHeight: 2000, scrollTop: 0, getAttribute: () => 'light' },
+      readyState: 'complete',
+      addEventListener: (name, listener) => {
+        listeners[name] ||= [];
+        listeners[name].push(listener);
+      },
       createElement: () => ({}),
       head: { append: script => scripts.push(script) },
     },
   });
-  return { listeners, scripts, captured, warnings, sdk, Element, load: () => scripts[0].onload(), config: () => config };
+  return {
+    listeners,
+    dispatchDoc,
+    windowListeners,
+    window,
+    scripts,
+    captured,
+    warnings,
+    sdk,
+    Element,
+    load: () => scripts[0].onload(),
+    config: () => config,
+  };
 }
 
 test('ordinary previews never load the SDK; deliberate localhost tests are labeled', () => {
@@ -95,11 +130,11 @@ test('labels first pageviews, automatic events and replay; sanitizes metadata wi
 
 test('queues early success events and emits only known form identifiers', () => {
   const f = fixture();
-  f.listeners['horizons:form-sent']({ detail: 'contact' });
-  f.listeners['horizons:form-sent']({ detail: { email: 'private' } });
+  f.dispatchDoc('horizons:form-sent', { detail: 'contact' });
+  f.dispatchDoc('horizons:form-sent', { detail: { email: 'private' } });
   assert.equal(f.captured.length, 0);
   f.load();
-  f.listeners['horizons:form-sent']({ detail: 'goodbye' });
+  f.dispatchDoc('horizons:form-sent', { detail: 'goodbye' });
   assert.deepEqual(f.captured.map(event => event.name), ['website_contact_message_sent', 'website_uninstall_feedback_sent']);
   assert.equal(JSON.stringify(f.captured).includes('private'), false);
 });
@@ -123,15 +158,60 @@ test('removes query strings from heatmap keys and preserves combined click point
 test('install clicks retain placement and distinguish the placeholder from a listing', () => {
   const f = fixture();
   f.load();
-  const link = { href: 'https://chromewebstore.google.com/', closest: selector => selector === '.hero' };
+  const link = { href: 'https://chromewebstore.google.com/', closest: selector => selector === '.hero' ? link : null };
   const target = new f.Element();
-  target.closest = () => link;
-  f.listeners.click({ target });
+  target.closest = selector => selector === 'a' ? link : null;
+  f.dispatchDoc('click', { target });
   assert.equal(f.captured[0].properties.placement, 'hero');
   assert.equal(f.captured[0].properties.install_listing_available, false);
   link.href = 'https://chromewebstore.google.com/detail/example/example-id';
-  f.listeners.click({ target });
+  f.dispatchDoc('click', { target });
   assert.equal(f.captured[1].properties.install_listing_available, true);
+});
+
+test('captures theme toggle, faq accordion expansion, demo interactions, and scroll milestones', () => {
+  const f = fixture();
+  f.load();
+
+  // 1. Theme toggle click
+  const themeBtn = { id: 'themeToggle' };
+  const themeTarget = new f.Element();
+  themeTarget.closest = sel => (sel === '#themeToggle' ? themeBtn : null);
+  f.dispatchDoc('click', { target: themeTarget });
+  const themeEvent = f.captured.find(e => e.name === 'website_theme_toggled');
+  assert.ok(themeEvent);
+  assert.equal(themeEvent.properties.theme, 'dark');
+
+  // 2. FAQ expansion
+  const faqElement = new f.Element();
+  faqElement.matches = sel => sel === '.faq-item';
+  faqElement.open = true;
+  faqElement.querySelector = sel => (sel === 'summary' ? { textContent: '  Where are my goals stored?  ' } : null);
+  f.dispatchDoc('toggle', { target: faqElement });
+  const faqEvent = f.captured.find(e => e.name === 'website_faq_expanded');
+  assert.ok(faqEvent);
+  assert.equal(faqEvent.properties.question, 'Where are my goals stored?');
+
+  // 3. Demo interaction via custom event
+  f.dispatchDoc('horizons:analytics', {
+    detail: {
+      name: 'website_demo_interacted',
+      properties: { action: 'toggle_goal', tier: 'week', completed: true },
+    },
+  });
+  const demoEvent = f.captured.find(e => e.name === 'website_demo_interacted');
+  assert.ok(demoEvent);
+  assert.equal(demoEvent.properties.action, 'toggle_goal');
+  assert.equal(demoEvent.properties.tier, 'week');
+  assert.equal(demoEvent.properties.completed, true);
+
+  // 4. Scroll milestones
+  f.window.scrollY = 600;
+  for (const fn of f.windowListeners['scroll'] || []) fn();
+  const scroll25 = f.captured.find(e => e.name === 'website_scroll_depth_reached' && e.properties.depth_percent === 25);
+  const scroll50 = f.captured.find(e => e.name === 'website_scroll_depth_reached' && e.properties.depth_percent === 50);
+  assert.ok(scroll25);
+  assert.ok(scroll50);
 });
 
 test('SDK failures are reported without throwing into website code', () => {

@@ -39,9 +39,62 @@
     if (event.detail === 'contact') capture('website_contact_message_sent');
     if (event.detail === 'goodbye') capture('website_uninstall_feedback_sent');
   });
+  document.addEventListener('horizons:analytics', event => {
+    if (!event.detail || typeof event.detail !== 'object') return;
+    const { name, properties } = event.detail;
+    if (typeof name === 'string' && name.startsWith('website_')) {
+      capture(name, properties || {});
+    }
+  });
+
+  // Track theme toggle interactions
   document.addEventListener('click', event => {
-    const link = event.target instanceof Element ? event.target.closest('a') : null;
-    if (!link || !link.href.startsWith('https://chromewebstore.google.com/')) return;
+    const target = event.target;
+    const btn = target && typeof target.closest === 'function' ? target.closest('#themeToggle') : null;
+    if (!btn) return;
+    const docElem = document.documentElement;
+    const current = (docElem && typeof docElem.getAttribute === 'function' ? docElem.getAttribute('data-theme') : null) || 'light';
+    const nextTheme = current === 'dark' ? 'light' : 'dark';
+    capture('website_theme_toggled', { theme: nextTheme });
+  }, true);
+
+  // Track FAQ accordion toggles
+  document.addEventListener('toggle', event => {
+    const details = event.target;
+    if (details && typeof details.matches === 'function' && details.matches('.faq-item') && details.open) {
+      const summary = typeof details.querySelector === 'function' ? details.querySelector('summary') : null;
+      const question = summary && summary.textContent ? summary.textContent.trim() : 'unknown';
+      capture('website_faq_expanded', { question });
+    }
+  }, true);
+
+  // Track scroll depth milestones (25%, 50%, 75%, 90%)
+  (() => {
+    const thresholds = [25, 50, 75, 90];
+    const reached = new Set();
+    const checkScroll = () => {
+      const doc = document.documentElement;
+      const totalHeight = (doc.scrollHeight || 0) - (window.innerHeight || 0);
+      if (totalHeight <= 0) return;
+      const scrollPos = window.scrollY || window.pageYOffset || doc.scrollTop || 0;
+      const percent = Math.min(100, Math.round((scrollPos / totalHeight) * 100));
+      for (const t of thresholds) {
+        if (percent >= t && !reached.has(t)) {
+          reached.add(t);
+          capture('website_scroll_depth_reached', { depth_percent: t });
+        }
+      }
+    };
+    window.addEventListener('scroll', checkScroll, { passive: true });
+    // Also check on load or hash jump
+    if (document.readyState === 'complete') checkScroll();
+    else window.addEventListener('load', checkScroll, { once: true });
+  })();
+
+  document.addEventListener('click', event => {
+    const target = event.target;
+    const link = target && typeof target.closest === 'function' ? target.closest('a') : null;
+    if (!link || !link.href || !link.href.startsWith('https://chromewebstore.google.com/')) return;
     const placement = link.closest('.site-header') ? 'header'
       : link.closest('.hero') ? 'hero'
       : link.closest('.cta-zoom') ? 'closing_cta'

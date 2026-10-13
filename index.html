@@ -720,6 +720,17 @@
     let hoveredGoalId = null;
     let customGoalSequence = 0;
 
+    function trackDemoAction(action, details = {}) {
+      try {
+        document.dispatchEvent(new CustomEvent('horizons:analytics', {
+          detail: {
+            name: 'website_demo_interacted',
+            properties: { action, ...details },
+          },
+        }));
+      } catch {}
+    }
+
     const yearThemes = [
       { run: 'mountain trail race', reading: 'nature books', language: 'French', level: 'A2' },
       { run: 'coastal half-marathon', reading: 'historical novels', language: 'Spanish', level: 'B1' },
@@ -1024,6 +1035,7 @@
       if (goal) {
         goal.completed = !goal.completed;
         renderTier(tier);
+        trackDemoAction('toggle_goal', { tier, completed: goal.completed });
       }
     }
 
@@ -1031,10 +1043,12 @@
       const section = document.getElementById(`tier-${tier}`);
       if (!section) return;
       section.classList.toggle('is-collapsed');
+      const isCollapsed = section.classList.contains('is-collapsed');
       section.querySelector('.preview-section-left')?.setAttribute(
         'aria-expanded',
-        String(!section.classList.contains('is-collapsed'))
+        String(!isCollapsed)
       );
+      trackDemoAction('toggle_tier_collapse', { tier, collapsed: isCollapsed });
     }
 
     function handleTierCollapseKey(event, tier) {
@@ -1056,6 +1070,7 @@
           input.value = '';
           input.focus();
         }
+        trackDemoAction('open_composer', { tier });
       }
     }
 
@@ -1114,6 +1129,10 @@
       horizonData[tier].push(newGoal);
       closeComposerForTier(tier);
       renderTier(tier);
+      trackDemoAction('submit_goal', {
+        tier,
+        has_parent: Boolean(parent),
+      });
     }
 
     function handleComposerKey(event, tier) {
@@ -1130,6 +1149,7 @@
       if (year < DEMO_YEAR - PERIOD_RANGE || year > DEMO_YEAR + PERIOD_RANGE) return;
       selectedYear = year;
       renderAllTiers();
+      trackDemoAction('select_year', { year });
     }
 
     function shiftYear(delta) {
@@ -1141,6 +1161,7 @@
       if (tier === 'month') selectedMonth = new Date(DEMO_MONTH);
       if (tier === 'week') selectedWeek = new Date(DEMO_WEEK);
       renderAllTiers();
+      trackDemoAction('select_today', { tier });
     }
 
     function shiftPeriod(tier, delta) {
@@ -1154,6 +1175,7 @@
         if (Math.abs(offset) <= PERIOD_RANGE) selectedWeek = target;
       }
       renderAllTiers();
+      trackDemoAction('shift_period', { tier, delta });
     }
 
     function escapeHtml(str) {
