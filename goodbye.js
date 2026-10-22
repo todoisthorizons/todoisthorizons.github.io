@@ -25,6 +25,8 @@
   const submitButton = form.querySelector('button[type="submit"]');
   const status = form.querySelector('.contact-status');
   const thanks = document.getElementById('goodbye-thanks');
+  const otherCheckbox = document.getElementById('reason-other');
+  const otherField = document.getElementById('message-field');
 
   // Context appended by the extension; anything that doesn't match a strict format is dropped.
   const params = new URLSearchParams(window.location.search);
@@ -40,6 +42,58 @@
     status.textContent = message;
     status.dataset.state = state || '';
   };
+
+  const getSelectedReasonKeys = () => {
+    // 1. Checkbox NodeList / elements in standard DOM
+    if (typeof form.querySelectorAll === 'function') {
+      const checkedBoxes = Array.from(form.querySelectorAll('input[name="reason"]:checked'));
+      if (checkedBoxes.length > 0) {
+        return checkedBoxes
+          .map(cb => cb.value)
+          .filter(val => Object.prototype.hasOwnProperty.call(REASONS, val));
+      }
+    }
+
+    // 2. Fallback for mocks / synthetic environments (e.g. tests where elements.reason is provided)
+    const reasonEl = form.elements && form.elements.reason;
+    if (reasonEl) {
+      if (typeof reasonEl.value === 'string' && Object.prototype.hasOwnProperty.call(REASONS, reasonEl.value)) {
+        return [reasonEl.value];
+      }
+      if (typeof reasonEl.length === 'number') {
+        const keys = [];
+        for (let i = 0; i < reasonEl.length; i++) {
+          const item = reasonEl[i];
+          if (item && item.checked && Object.prototype.hasOwnProperty.call(REASONS, item.value)) {
+            keys.push(item.value);
+          }
+        }
+        if (keys.length > 0) return keys;
+      }
+    }
+
+    return [];
+  };
+
+  const isOtherSelected = () => {
+    return getSelectedReasonKeys().includes('other');
+  };
+
+  const syncOtherField = (shouldFocus = false) => {
+    if (!otherField || otherField === thanks) return;
+    const active = isOtherSelected();
+    otherField.hidden = !active;
+    if (otherCheckbox && otherCheckbox !== thanks) {
+      otherCheckbox.setAttribute('aria-expanded', String(active));
+    }
+    if (active && shouldFocus) {
+      const textarea = otherField.querySelector('textarea');
+      if (textarea) textarea.focus();
+    }
+  };
+
+  // Initial state: hide the field unless already selected (e.g. back navigation)
+  syncOtherField(false);
 
   const readTimestamps = () => {
     try {
@@ -77,6 +131,7 @@
 
   const showThanks = () => {
     form.reset();
+    syncOtherField(false);
     form.hidden = true;
     thanks.hidden = false;
     thanks.focus({ preventScroll: true });
@@ -86,12 +141,15 @@
     event.preventDefault();
     if (!form.reportValidity()) return;
 
-    const reasonKey = Object.prototype.hasOwnProperty.call(REASONS, form.elements.reason.value)
-      ? form.elements.reason.value
-      : '';
-    const message = form.elements.message.value.trim().slice(0, LIMITS.message);
-    const email = form.elements.email.value.trim().slice(0, LIMITS.email);
-    const botcheck = form.elements.botcheck.value;
+    const selectedKeys = getSelectedReasonKeys();
+    const otherActive = selectedKeys.includes('other');
+    const message = (form.elements.message && form.elements.message.value ? form.elements.message.value : '')
+      .trim()
+      .slice(0, LIMITS.message);
+    const email = (form.elements.email && form.elements.email.value ? form.elements.email.value : '')
+      .trim()
+      .slice(0, LIMITS.email);
+    const botcheck = form.elements.botcheck ? form.elements.botcheck.value : '';
 
     // Honeypot: pretend success for bots without spending API quota.
     if (botcheck.trim() !== '') {
@@ -99,8 +157,10 @@
       return;
     }
 
-    if (!reasonKey) {
-      setStatus('Please choose a reason.', 'error');
+    if (selectedKeys.length === 0) {
+      setStatus('Please choose at least one reason.', 'error');
+      const firstInput = form.querySelector ? form.querySelector('input[name="reason"]') : null;
+      if (firstInput && typeof firstInput.focus === 'function') firstInput.focus();
       return;
     }
     if (email && !EMAIL_REGEX.test(email)) {
@@ -116,14 +176,15 @@
     }
 
     // Build the payload from an explicit whitelist instead of serialising the DOM form.
-    const reason = REASONS[reasonKey];
+    const selectedLabels = selectedKeys.map(k => REASONS[k]);
+    const reasonsFormatted = selectedLabels.join(', ');
     const payload = new FormData();
     payload.append('access_key', ACCESS_KEY);
     payload.append('botcheck', '');
-    payload.append('subject', `[Horizons Uninstall] ${reason}`);
+    payload.append('subject', `[Horizons Uninstall] ${reasonsFormatted}`);
     payload.append('from_name', 'Horizons Uninstall Survey');
-    payload.append('reason', reason);
-    payload.append('message', message || '(no comment)');
+    payload.append('reason', reasonsFormatted);
+    payload.append('message', (otherActive && message) ? message : (message || '(no comment)'));
     if (email) payload.append('email', email);
     if (context.version) payload.append('extension_version', context.version);
     if (context.days) payload.append('days_installed', context.days);
@@ -168,6 +229,17 @@
   });
 
   form.addEventListener('change', (event) => {
-    if (event.target.name === 'reason' && status.dataset.state === 'error') setStatus('', '');
+    if (event.target && event.target.name === 'reason') {
+      const keys = getSelectedReasonKeys();
+      if (keys.length > 0 && status.dataset.state === 'error') {
+        setStatus('', '');
+      }
+      const justToggledOther = event.target.value === 'other';
+      syncOtherField(justToggledOther && event.target.checked);
+    }
+  });
+
+  form.addEventListener('reset', () => {
+    setTimeout(() => syncOtherField(false), 0);
   });
 })();

@@ -2280,13 +2280,15 @@ button {
 
 .goodbye-reason-list {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 8px;
 }
 
 .goodbye-reason {
+  display: block;
   position: relative;
   cursor: pointer;
+  user-select: none;
 }
 
 .goodbye-reason input {
@@ -2295,46 +2297,99 @@ button {
   pointer-events: none;
 }
 
-.goodbye-reason span {
-  display: inline-flex;
+.goodbye-reason-control {
+  display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 8px 14px;
+  gap: 12px;
+  padding: 10px 14px;
   border: 1px solid var(--td-border);
-  border-radius: var(--td-radius-pill);
+  border-radius: var(--td-radius-md);
   background: var(--td-bg);
   color: var(--td-text-primary);
   font-size: 14px;
-  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
 }
 
-.goodbye-reason:hover span {
+.goodbye-reason:hover .goodbye-reason-control {
   border-color: var(--td-text-tertiary);
 }
 
-.goodbye-reason input:checked + span {
+.goodbye-reason-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--td-border);
+  border-radius: 4px;
+  background: var(--td-surface);
+  color: #ffffff;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.goodbye-reason-box svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.15s ease, transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.goodbye-reason:hover .goodbye-reason-box {
+  border-color: var(--td-text-secondary);
+}
+
+.goodbye-reason input:checked + .goodbye-reason-control {
   border-color: var(--td-brand);
   background: var(--td-brand-subtle);
-  color: var(--td-brand);
+  color: var(--td-text-primary);
   font-weight: 600;
 }
 
-.goodbye-reason input:checked + span::before {
-  content: "";
-  width: 12px;
-  height: 12px;
-  background: currentColor;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / contain no-repeat;
+.goodbye-reason input:checked + .goodbye-reason-control .goodbye-reason-box {
+  border-color: var(--td-brand);
+  background: var(--td-brand);
 }
 
-.goodbye-reason input:focus-visible + span {
+.goodbye-reason input:checked + .goodbye-reason-control .goodbye-reason-box svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.goodbye-reason input:focus-visible + .goodbye-reason-control {
   outline: 2px solid var(--td-brand-glow);
   outline-offset: 2px;
 }
 
-.goodbye-reason:active span {
-  transform: scale(0.97);
+.goodbye-reason:active .goodbye-reason-control {
+  transform: scale(0.99);
+}
+
+.goodbye-other-field[hidden],
+.contact-field[hidden] {
+  display: none !important;
+}
+
+.goodbye-other-field:not([hidden]) {
+  animation: goodbye-field-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes goodbye-field-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .goodbye-other-field:not([hidden]) {
+    animation: none;
+  }
 }
 
 .goodbye-thanks {
