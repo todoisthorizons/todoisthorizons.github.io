@@ -25,8 +25,6 @@
   const submitButton = form.querySelector('button[type="submit"]');
   const status = form.querySelector('.contact-status');
   const thanks = document.getElementById('goodbye-thanks');
-  const otherCheckbox = document.getElementById('reason-other');
-  const otherField = document.getElementById('message-field');
 
   // Context appended by the extension; anything that doesn't match a strict format is dropped.
   const params = new URLSearchParams(window.location.search);
@@ -75,26 +73,6 @@
     return [];
   };
 
-  const isOtherSelected = () => {
-    return getSelectedReasonKeys().includes('other');
-  };
-
-  const syncOtherField = (shouldFocus = false) => {
-    if (!otherField || otherField === thanks) return;
-    const active = isOtherSelected();
-    otherField.hidden = !active;
-    if (otherCheckbox && otherCheckbox !== thanks) {
-      otherCheckbox.setAttribute('aria-expanded', String(active));
-    }
-    if (active && shouldFocus) {
-      const textarea = otherField.querySelector('textarea');
-      if (textarea) textarea.focus();
-    }
-  };
-
-  // Initial state: hide the field unless already selected (e.g. back navigation)
-  syncOtherField(false);
-
   const readTimestamps = () => {
     try {
       const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -131,7 +109,6 @@
 
   const showThanks = () => {
     form.reset();
-    syncOtherField(false);
     form.hidden = true;
     thanks.hidden = false;
     thanks.focus({ preventScroll: true });
@@ -142,7 +119,6 @@
     if (!form.reportValidity()) return;
 
     const selectedKeys = getSelectedReasonKeys();
-    const otherActive = selectedKeys.includes('other');
     const message = (form.elements.message && form.elements.message.value ? form.elements.message.value : '')
       .trim()
       .slice(0, LIMITS.message);
@@ -184,7 +160,7 @@
     payload.append('subject', `[Horizons Uninstall] ${reasonsFormatted}`);
     payload.append('from_name', 'Horizons Uninstall Survey');
     payload.append('reason', reasonsFormatted);
-    payload.append('message', (otherActive && message) ? message : (message || '(no comment)'));
+    payload.append('message', message || '(no comment)');
     if (email) payload.append('email', email);
     if (context.version) payload.append('extension_version', context.version);
     if (context.days) payload.append('days_installed', context.days);
@@ -234,12 +210,6 @@
       if (keys.length > 0 && status.dataset.state === 'error') {
         setStatus('', '');
       }
-      const justToggledOther = event.target.value === 'other';
-      syncOtherField(justToggledOther && event.target.checked);
     }
-  });
-
-  form.addEventListener('reset', () => {
-    setTimeout(() => syncOtherField(false), 0);
   });
 })();

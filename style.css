@@ -2366,30 +2366,16 @@ button {
   transform: scale(0.99);
 }
 
-.goodbye-other-field[hidden],
 .contact-field[hidden] {
   display: none !important;
 }
 
-.goodbye-other-field:not([hidden]) {
-  animation: goodbye-field-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes goodbye-field-in {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .goodbye-other-field:not([hidden]) {
-    animation: none;
-  }
+.goodbye-form #message-field textarea {
+  min-height: 60px;
+  height: 64px;
+  padding: 8px 12px;
+  line-height: 1.45;
+  resize: vertical;
 }
 
 .goodbye-thanks {

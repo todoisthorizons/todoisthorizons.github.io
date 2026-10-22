@@ -9,7 +9,7 @@
   <title>Sorry to see you go: Horizons for Todoist</title>
   <meta name="description" content="Horizons for Todoist has been removed. Tell us why so we can make it better.">
   <meta name="robots" content="noindex, nofollow">
-  <link rel="stylesheet" href="style.css?v=20261022-a">
+  <link rel="stylesheet" href="style.css?v=20261022-b">
   <link rel="icon" type="image/svg+xml" href="assets/icon/icon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icon/32.png">
   <link rel="apple-touch-icon" href="assets/icon/128.png">
@@ -88,15 +88,6 @@
             </span>
           </label>
           <label class="goodbye-reason">
-            <input type="checkbox" name="reason" value="workflow">
-            <span class="goodbye-reason-control">
-              <span class="goodbye-reason-box" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
-              </span>
-              <span class="goodbye-reason-text">It didn’t fit my workflow</span>
-            </span>
-          </label>
-          <label class="goodbye-reason">
             <input type="checkbox" name="reason" value="missing-feature">
             <span class="goodbye-reason-control">
               <span class="goodbye-reason-box" aria-hidden="true">
@@ -133,7 +124,7 @@
             </span>
           </label>
           <label class="goodbye-reason">
-            <input type="checkbox" name="reason" value="other" id="reason-other" aria-controls="message-field" aria-expanded="false">
+            <input type="checkbox" name="reason" value="other">
             <span class="goodbye-reason-control">
               <span class="goodbye-reason-box" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
@@ -144,9 +135,9 @@
         </div>
       </fieldset>
 
-      <label class="contact-field goodbye-other-field" id="message-field" hidden>
+      <label class="contact-field" id="message-field">
         <span>What could we do better? <small class="contact-optional">(optional)</small></span>
-        <textarea name="message" rows="4" maxlength="3000" placeholder="Anything you’d like to share helps."></textarea>
+        <textarea name="message" rows="2" maxlength="3000" placeholder="Tell us what was missing, what didn’t work, or anything you’d like to share."></textarea>
       </label>
 
       <label class="contact-field">
@@ -237,7 +228,7 @@
       applyTheme(next);
     });
   </script>
-  <script src="goodbye.js?v=20261022-a"></script>
+  <script src="goodbye.js?v=20261022-b"></script>
   <script src="motion.js?v=20261004-zd"></script>
 </body>
 </html>
