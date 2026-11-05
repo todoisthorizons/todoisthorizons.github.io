@@ -7,8 +7,8 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script src="analytics.js?v=20261013-a" defer></script>
   <title>Horizons for Todoist: Plan Long-Term Goals Directly Inside Todoist</title>
-  <meta name="description" content="Connect your daily tasks to your biggest life goals. Multi-tiered horizon planning (Year, Month, Week) for Todoist. 100% private and free to use.">
-  <link rel="stylesheet" href="style.css?v=20261005-k">
+  <meta name="description" content="Connect your daily tasks to your biggest life goals. Multi-tiered horizon planning (Year, Month, Week, Day) for Todoist. 100% private and free to use.">
+  <link rel="stylesheet" href="style.css?v=20261105-a">
   <link rel="icon" type="image/svg+xml" href="assets/icon/icon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icon/32.png">
   <link rel="apple-touch-icon" href="assets/icon/128.png">
@@ -65,7 +65,7 @@
       <h1>See the big picture<br>directly inside Todoist.</h1>
 
       <p class="lead">
-        Turn your big goals into everyday action. Horizons helps you map out what matters across years, months, and weeks.
+        Turn your big goals into everyday action. Horizons helps you map out what matters across years, months, weeks, and days.
       </p>
 
       <div class="hero-cta">
@@ -195,6 +195,29 @@
                 <span class="journey-goal-check journey-week-check is-complete"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path class="journey-check-path" d="m8 12 2.5 2.5L16 9"></path></svg></span>
               </li>
             </ul>
+            <div class="journey-day-panel" aria-label="Day lane">
+              <div class="journey-step-label"><span>Day tasks</span><span>Race day</span></div>
+              <ul class="journey-day-list">
+                <li class="journey-day-item is-complete">
+                  <span class="journey-day-time">Morning</span>
+                  <div class="journey-goal-entry is-saved">
+                    <span class="journey-goal-copy">Easy shakeout jog</span>
+                  </div>
+                </li>
+                <li class="journey-day-item is-complete">
+                  <span class="journey-day-time">Midday</span>
+                  <div class="journey-goal-entry is-saved">
+                    <span class="journey-goal-copy">Race day: 42.2 km</span>
+                  </div>
+                </li>
+                <li class="journey-day-item is-complete">
+                  <span class="journey-day-time">Evening</span>
+                  <div class="journey-goal-entry is-saved">
+                    <span class="journey-goal-copy">Stretch and recover</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
             <div class="journey-week-progress" aria-hidden="true">
               <div class="journey-progress-line"><span>Weekly progress</span><span class="journey-week-count">4 / 4 weeks</span></div>
               <div class="journey-progress-track"><span class="journey-week-fill journey-progress-fill"></span></div>
@@ -208,7 +231,7 @@
     <section class="section-container upgrade-section" id="upgrades" aria-labelledby="upgrades-title">
       <div class="section-header">
         <h2 id="upgrades-title">Designed to feel native to Todoist.</h2>
-        <p>A practical planning layer inside Todoist, from long-term direction to this week's next step.</p>
+        <p>A practical planning layer inside Todoist, from long-term direction to today's next step.</p>
       </div>
 
       <div class="upgrade-grid">
@@ -218,7 +241,7 @@
             <path d="M16 2v4M8 2v4M3 10h18M8 14h3M8 18h6"></path>
           </svg>
           <h3>Plan across horizons</h3>
-          <p>Connect yearly goals to monthly focus and weekly milestones.</p>
+          <p>Connect yearly goals to monthly focus, weekly milestones, and day-lane tasks.</p>
         </article>
 
         <article class="upgrade-item scroll-reveal">
@@ -246,7 +269,7 @@
             <path d="M21 13v2a3 3 0 0 1-3 3H3"></path>
           </svg>
           <h3>Sync across browsers</h3>
-          <p>Optional sync keeps your plan available across browsers through Todoist.</p>
+          <p>Optional sync keeps your plan available across browsers. Day-lane items can also appear as Inbox tasks when that setting is on.</p>
         </article>
 
         <article class="upgrade-item scroll-reveal">
@@ -440,6 +463,51 @@
               </div>
             </div>
           </section>
+
+          <!-- 4. Day Section -->
+          <section class="preview-tier-section scroll-reveal" id="tier-day">
+            <div class="preview-section-header">
+              <div class="preview-section-left" role="button" tabindex="0" aria-expanded="true" aria-controls="content-day" onclick="toggleTierCollapse('day')" onkeydown="handleTierCollapseKey(event, 'day')">
+                <svg class="tier-chevron" id="chevron-day" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                <h3 class="preview-section-title">Day</h3>
+              </div>
+              <div class="preview-section-controls">
+                <div class="preview-nav-group">
+                  <button type="button" class="preview-nav-arrow" id="day-previous" onclick="shiftPeriod('day', -1)" title="Previous day" aria-label="Previous day">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  </button>
+                  <button type="button" class="preview-nav-today" onclick="selectToday('day')">Today</button>
+                  <button type="button" class="preview-nav-arrow" id="day-next" onclick="shiftPeriod('day', 1)" title="Next day" aria-label="Next day">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="tier-content" id="content-day">
+              <div class="preview-lane-header">
+                <span class="preview-lane-label" id="laneTitle-day">Sat, Oct 3</span>
+                <span class="preview-lane-count" id="count-day">3</span>
+              </div>
+              <div class="tier-goal-list" id="goalList-day"></div>
+              <button type="button" class="mini-add-trigger" id="addBtn-day" onclick="openComposerForTier('day')">
+                <span class="plus-circle">+</span>
+                <span>Add goal</span>
+              </button>
+              <div class="mini-inline-composer" id="composer-day">
+                <input type="text" class="mini-composer-input" id="input-day" placeholder="Add day task..." onkeydown="handleComposerKey(event, 'day')">
+                <label class="mini-composer-parent">
+                  <span>Parent goal</span>
+                  <select class="mini-composer-select" id="parent-day"></select>
+                </label>
+                <div class="mini-composer-actions">
+                  <button type="button" class="mini-composer-btn-cancel" onclick="closeComposerForTier('day')">Cancel</button>
+                  <button type="button" class="mini-composer-btn-save" onclick="submitGoalForTier('day')">Add goal</button>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
       <p class="preview-disclaimer scroll-reveal">An illustrative preview of the experience; the installed extension may look and behave differently.</p>
@@ -468,7 +536,7 @@
             <path d="M18.36 18.36A9 9 0 0 1 4 12"></path>
           </svg>
           <h3>Sync is optional</h3>
-          <p>When enabled, sync and backups go directly to Todoist's official API and your own account.</p>
+          <p>When enabled, sync and backups go directly to Todoist's official API and your own account. Day-lane Inbox twins are optional too, and stay in your Inbox under your control.</p>
         </article>
         <article class="privacy-point scroll-reveal">
           <svg class="privacy-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -497,11 +565,13 @@
             <p>Goals and preferences are stored locally in your browser.</p>
 
             <p>If you enable sync, Horizons also stores your goals in a separate project in your Todoist account.</p>
+
+            <p>If “Create Inbox tasks for day-lane items” is on, matching day tasks also live in your Todoist Inbox.</p>
           </div>
         </details>
         <details class="faq-item scroll-reveal">
           <summary>Do I have to turn on sync?</summary>
-          <div class="faq-answer"><p>No. Sync and backups are optional. You can keep your planning data on this device.</p></div>
+          <div class="faq-answer"><p>No. Sync, backups, and day-lane Inbox tasks are optional. You can keep your planning data on this device.</p></div>
         </details>
         <details class="faq-item scroll-reveal">
           <summary>Can I back up or export my plan?</summary>
@@ -510,9 +580,11 @@
         <details class="faq-item scroll-reveal">
           <summary>Does Horizons create tasks in Todoist?</summary>
           <div class="faq-answer">
-            <p>No. Horizons doesn't create or delete tasks in your regular Todoist projects or change your regular to-dos.</p>
+            <p>When “Create Inbox tasks for day-lane items” is enabled (it is on by default), Horizons creates and maintains matching Inbox tasks for day-lane items—updating, completing, reopening, or deleting those twins as you work. Turning the setting off stops new twins; existing Inbox tasks stay until you remove them.</p>
 
-            <p>If sync or backups are enabled, Horizons creates a separate, hidden Todoist project to store its planning data.</p>
+            <p>Linking a Todoist task to a week, month, or year goal stores the link in Horizons and does not rewrite that task’s title or project.</p>
+
+            <p>If sync or backups are enabled, Horizons also uses a separate Todoist project to store its planning data.</p>
           </div>
         </details>
         <details class="faq-item scroll-reveal">
@@ -521,6 +593,8 @@
             <p>If you uninstall Horizons without sync or backups enabled, your local data is removed.</p>
 
             <p>If you have sync and/or backups enabled, your goals remain in a separate Todoist project and can be restored when you reinstall the extension. You can also restore a JSON backup.</p>
+
+            <p>Any Inbox day-task twins already created stay in your Todoist Inbox until you delete them.</p>
           </div>
         </details>
         <details class="faq-item scroll-reveal">
@@ -576,13 +650,15 @@
       <div class="cta-zoom-sticky">
         <div class="cta-zoom-top" aria-hidden="true">
           <div class="cta-zoom-steps">
+            <span class="cta-zoom-step">Day</span>
+            <span class="cta-zoom-step-line"><i></i></span>
             <span class="cta-zoom-step">Week</span>
             <span class="cta-zoom-step-line"><i></i></span>
             <span class="cta-zoom-step">Month</span>
             <span class="cta-zoom-step-line"><i></i></span>
             <span class="cta-zoom-step">Year</span>
           </div>
-          <p class="cta-zoom-caption">It starts with one week.</p>
+          <p class="cta-zoom-caption">It starts with one day.</p>
         </div>
         <div class="cta-zoom-stage" aria-hidden="true">
           <div class="cta-zoom-map">
@@ -627,7 +703,7 @@
         </div>
         <div class="cta-zoom-finale">
           <h2 id="cta-zoom-title">Make room for the bigger picture.</h2>
-          <p>Every week you check off moves the whole year forward.</p>
+          <p>Every day you check off moves the whole year forward.</p>
           <a href="https://chromewebstore.google.com/" target="_blank" rel="noopener" class="btn btn-primary btn-lg">
             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8M12 8v8"></path></svg>
             <span>Add to Chrome</span>
@@ -714,9 +790,11 @@
     const DEMO_YEAR = DEMO_TODAY.getFullYear();
     const DEMO_MONTH = new Date(DEMO_YEAR, DEMO_TODAY.getMonth(), 1);
     const DEMO_WEEK = getWeekStart(DEMO_TODAY);
+    const DEMO_DAY = new Date(DEMO_TODAY);
     let selectedYear = DEMO_YEAR;
     let selectedMonth = new Date(DEMO_MONTH);
     let selectedWeek = new Date(DEMO_WEEK);
+    let selectedDay = new Date(DEMO_DAY);
     let hoveredGoalId = null;
     let customGoalSequence = 0;
 
@@ -750,6 +828,9 @@
     const weekRunTargets = [5, 6, 8, 10, 12, 15, 18, 20, 22, 25, 30];
     const weekPageTargets = [20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120];
     const weekPracticeMinutes = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
+    const dayRunTargets = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    const dayPageTargets = [8, 10, 12, 15, 18, 20, 22, 25, 28, 30, 35];
+    const dayPracticeMinutes = [5, 8, 10, 12, 15, 18, 20, 22, 25, 28, 30];
 
     function addDays(date, amount) {
       const result = new Date(date);
@@ -777,12 +858,16 @@
       return `${year}-W${String(week).padStart(2, '0')}`;
     }
 
+    function getDayKey(date) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    }
+
     function getWeekMonthKey(weekStart) {
       return getMonthKey(addDays(weekStart, 3));
     }
 
     function buildDemoGoals() {
-      const goals = { year: [], month: [], week: [] };
+      const goals = { year: [], month: [], week: [], day: [] };
 
       for (let offset = -PERIOD_RANGE; offset <= PERIOD_RANGE; offset += 1) {
         const year = DEMO_YEAR + offset;
@@ -851,7 +936,32 @@
             text: sample.text,
             completed: (periodIndex + sampleIndex) % 3 === 0,
             parentGoalId: parent?.id,
-            parentTitle: parent.text,
+            parentTitle: parent?.text,
+          });
+        });
+      }
+
+      for (let offset = -PERIOD_RANGE; offset <= PERIOD_RANGE; offset += 1) {
+        const day = addDays(DEMO_DAY, offset);
+        const periodKey = getDayKey(day);
+        const weekKey = getWeekKey(day);
+        const periodIndex = offset + PERIOD_RANGE;
+        const yearIndex = day.getFullYear() - (DEMO_YEAR - PERIOD_RANGE);
+        const theme = yearThemes[Math.max(0, Math.min(yearThemes.length - 1, yearIndex))];
+        const daySamples = [
+          { slug: 'run', text: `Run ${dayRunTargets[periodIndex]} km toward the ${theme.run}` },
+          { slug: 'read', text: `Read ${dayPageTargets[periodIndex]} pages of ${theme.reading}` },
+          { slug: 'spanish', text: `Practice ${theme.language} for ${dayPracticeMinutes[periodIndex]} minutes` },
+        ];
+        daySamples.forEach((sample, sampleIndex) => {
+          const parent = goals.week.find(item => item.id === `week-${weekKey}-${sample.slug}`);
+          goals.day.push({
+            id: `day-${periodKey}-${sample.slug}`,
+            periodKey,
+            text: sample.text,
+            completed: (periodIndex + sampleIndex) % 4 === 0,
+            parentGoalId: parent?.id,
+            parentTitle: parent?.text,
           });
         });
       }
@@ -864,7 +974,8 @@
     function getSelectedPeriodKey(tier) {
       if (tier === 'year') return String(selectedYear);
       if (tier === 'month') return getMonthKey(selectedMonth);
-      return getWeekKey(selectedWeek);
+      if (tier === 'week') return getWeekKey(selectedWeek);
+      return getDayKey(selectedDay);
     }
 
     function renderTier(tier) {
@@ -962,9 +1073,13 @@
       const weekEnd = addDays(selectedWeek, 6);
       const formatDate = date => new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
       document.getElementById('laneDates-week').textContent = `${formatDate(selectedWeek)} - ${formatDate(weekEnd)}, ${weekEnd.getFullYear()}`;
+      document.getElementById('laneTitle-day').textContent = selectedDay.toLocaleDateString('en-US', {
+        weekday: 'short', month: 'short', day: 'numeric',
+      });
 
       const monthOffset = (selectedMonth.getFullYear() - DEMO_MONTH.getFullYear()) * 12 + selectedMonth.getMonth() - DEMO_MONTH.getMonth();
       const weekOffset = Math.round((selectedWeek - DEMO_WEEK) / (7 * 86400000));
+      const dayOffset = Math.round((selectedDay - DEMO_DAY) / 86400000);
       document.getElementById('year-previous').disabled = selectedYear <= DEMO_YEAR - PERIOD_RANGE;
       document.getElementById('year-next').disabled = selectedYear >= DEMO_YEAR + PERIOD_RANGE;
       document.getElementById('year-horizon-previous').disabled = selectedYear <= DEMO_YEAR - PERIOD_RANGE;
@@ -973,10 +1088,13 @@
       document.getElementById('month-next').disabled = monthOffset >= PERIOD_RANGE;
       document.getElementById('week-previous').disabled = weekOffset <= -PERIOD_RANGE;
       document.getElementById('week-next').disabled = weekOffset >= PERIOD_RANGE;
+      document.getElementById('day-previous').disabled = dayOffset <= -PERIOD_RANGE;
+      document.getElementById('day-next').disabled = dayOffset >= PERIOD_RANGE;
       renderYearSelector();
       renderTier('year');
       renderTier('month');
       renderTier('week');
+      renderTier('day');
     }
 
     function getRelatedGoalIds(goalId) {
@@ -1081,6 +1199,9 @@
       if (tier === 'week') {
         return horizonData.month.filter(goal => goal.periodKey === getWeekMonthKey(selectedWeek));
       }
+      if (tier === 'day') {
+        return horizonData.week.filter(goal => goal.periodKey === getWeekKey(selectedDay));
+      }
       return [];
     }
 
@@ -1160,6 +1281,7 @@
       if (tier === 'year') selectedYear = DEMO_YEAR;
       if (tier === 'month') selectedMonth = new Date(DEMO_MONTH);
       if (tier === 'week') selectedWeek = new Date(DEMO_WEEK);
+      if (tier === 'day') selectedDay = new Date(DEMO_DAY);
       renderAllTiers();
       trackDemoAction('select_today', { tier });
     }
@@ -1173,6 +1295,10 @@
         const target = addDays(selectedWeek, delta * 7);
         const offset = Math.round((target - DEMO_WEEK) / (7 * 86400000));
         if (Math.abs(offset) <= PERIOD_RANGE) selectedWeek = target;
+      } else if (tier === 'day') {
+        const target = addDays(selectedDay, delta);
+        const offset = Math.round((target - DEMO_DAY) / 86400000);
+        if (Math.abs(offset) <= PERIOD_RANGE) selectedDay = target;
       }
       renderAllTiers();
       trackDemoAction('shift_period', { tier, delta });
@@ -1194,6 +1320,6 @@
   </script>
   <script src="motion.js?v=20261004-zd"></script>
   <script src="contact.js?v=20261013-a"></script>
-  <script src="cta-zoom.js?v=20261005-e"></script>
+  <script src="cta-zoom.js?v=20261105-a"></script>
 </body>
 </html>

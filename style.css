@@ -1214,6 +1214,34 @@ button {
   padding-top: 24px;
 }
 
+.journey-day-panel {
+  width: 100%;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--td-border);
+}
+
+.journey-day-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.journey-day-item {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.journey-day-time {
+  color: var(--td-text-tertiary);
+  font-size: 11px;
+  font-weight: 650;
+}
+
 .journey-progress-line {
   position: relative;
   display: flex;

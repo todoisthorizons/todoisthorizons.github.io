@@ -18,7 +18,8 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   const captions = [
-    'It starts with one week.',
+    'It starts with one day.',
+    'Days add up to a week.',
     'Weeks add up to a month.',
     'Months add up to your year.'
   ];
@@ -34,7 +35,7 @@
     pips: [0.69, 0.73],
     yearDone: 0.77,
     finale: 0.85,
-    levels: [0.12, 0.58],
+    levels: [0.06, 0.12, 0.58],
     weekFocusEnd: 0.09
   };
 
@@ -203,9 +204,17 @@
       map.style.transform = '';
     }
 
-    setLevel(progress < T.levels[0] ? 0 : progress < T.levels[1] ? 1 : 2);
+    setLevel(
+      progress < T.levels[0] ? 0
+        : progress < T.levels[1] ? 1
+          : progress < T.levels[2] ? 2
+            : 3
+    );
     stepLines[0].style.setProperty('--fill', String(clamp(progress / T.levels[0], 0, 1)));
     stepLines[1].style.setProperty('--fill', String(clamp((progress - T.levels[0]) / (T.levels[1] - T.levels[0]), 0, 1)));
+    if (stepLines[2]) {
+      stepLines[2].style.setProperty('--fill', String(clamp((progress - T.levels[1]) / (T.levels[2] - T.levels[1]), 0, 1)));
+    }
 
     renderMonth(nov, T.novWeeks, T.novDone, progress);
     renderMonth(dec, T.decWeeks, T.decDone, progress);
