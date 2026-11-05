@@ -7,8 +7,8 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script src="analytics.js?v=20261013-a" defer></script>
   <title>Horizons for Todoist: Plan Long-Term Goals Directly Inside Todoist</title>
-  <meta name="description" content="Connect your daily tasks to your biggest life goals. Multi-tiered horizon planning (Year, Month, Week, Day) for Todoist. 100% private and free to use.">
-  <link rel="stylesheet" href="style.css?v=20261105-a">
+  <meta name="description" content="Connect your daily tasks to your biggest life goals. Multi-tiered horizon planning (Year, Month, Week) for Todoist, with an optional day lane. 100% private and free to use.">
+  <link rel="stylesheet" href="style.css?v=20261105-b">
   <link rel="icon" type="image/svg+xml" href="assets/icon/icon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icon/32.png">
   <link rel="apple-touch-icon" href="assets/icon/128.png">
@@ -65,7 +65,10 @@
       <h1>See the big picture<br>directly inside Todoist.</h1>
 
       <p class="lead">
-        Turn your big goals into everyday action. Horizons helps you map out what matters across years, months, weeks, and days.
+        Turn your big goals into everyday action. Horizons helps you map out what matters across years, months, and weeks.
+      </p>
+      <p class="lead lead-secondary">
+        An optional day lane is there when you want today’s tasks in the same view—collapse it anytime if you don’t.
       </p>
 
       <div class="hero-cta">
@@ -231,7 +234,7 @@
     <section class="section-container upgrade-section" id="upgrades" aria-labelledby="upgrades-title">
       <div class="section-header">
         <h2 id="upgrades-title">Designed to feel native to Todoist.</h2>
-        <p>A practical planning layer inside Todoist, from long-term direction to today's next step.</p>
+        <p>A practical planning layer inside Todoist, from long-term direction to this week's next step.</p>
       </div>
 
       <div class="upgrade-grid">
@@ -241,7 +244,7 @@
             <path d="M16 2v4M8 2v4M3 10h18M8 14h3M8 18h6"></path>
           </svg>
           <h3>Plan across horizons</h3>
-          <p>Connect yearly goals to monthly focus, weekly milestones, and day-lane tasks.</p>
+          <p>Connect yearly goals to monthly focus and weekly milestones.</p>
         </article>
 
         <article class="upgrade-item scroll-reveal">
@@ -258,8 +261,8 @@
             <rect x="3" y="4" width="18" height="17" rx="2"></rect>
             <path d="M16 2v4M8 2v4M3 10h18M12 14v4m-2-2h4"></path>
           </svg>
-          <h3>Move through dates</h3>
-          <p>Use the mini-calendar to find the planning window you need.</p>
+          <h3>Optional day lane</h3>
+          <p>Add a day lane when you want today’s tasks in view. Collapse it anytime if you don’t use it.</p>
         </article>
 
         <article class="upgrade-item scroll-reveal">
@@ -269,7 +272,7 @@
             <path d="M21 13v2a3 3 0 0 1-3 3H3"></path>
           </svg>
           <h3>Sync across browsers</h3>
-          <p>Optional sync keeps your plan available across browsers. Day-lane items can also appear as Inbox tasks when that setting is on.</p>
+          <p>Optional sync keeps your plan available across browsers through Todoist.</p>
         </article>
 
         <article class="upgrade-item scroll-reveal">
@@ -465,13 +468,13 @@
           </section>
 
           <!-- 4. Day Section -->
-          <section class="preview-tier-section scroll-reveal" id="tier-day">
+          <section class="preview-tier-section scroll-reveal is-collapsed" id="tier-day">
             <div class="preview-section-header">
-              <div class="preview-section-left" role="button" tabindex="0" aria-expanded="true" aria-controls="content-day" onclick="toggleTierCollapse('day')" onkeydown="handleTierCollapseKey(event, 'day')">
+              <div class="preview-section-left" role="button" tabindex="0" aria-expanded="false" aria-controls="content-day" onclick="toggleTierCollapse('day')" onkeydown="handleTierCollapseKey(event, 'day')">
                 <svg class="tier-chevron" id="chevron-day" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-                <h3 class="preview-section-title">Day</h3>
+                <h3 class="preview-section-title">Day <span class="preview-optional-label">optional</span></h3>
               </div>
               <div class="preview-section-controls">
                 <div class="preview-nav-group">
