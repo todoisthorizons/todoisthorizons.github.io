@@ -62,92 +62,103 @@
   <main class="legal-page-container">
     <div class="legal-header page-intro">
       <h1>Privacy Policy</h1>
-      <p class="lead">Last updated: November 5, 2026</p>
+      <p class="lead">Last updated: November 6, 2026</p>
     </div>
 
     <div class="legal-card">
       <section class="legal-section scroll-reveal">
-      <h2>1. Single Purpose & Data Collection</h2>
+      <h2>1. Purpose and information we process</h2>
       <p>
-        Horizons for Todoist provides year, month, week, and day planning inside Todoist. It processes the goals and preferences you enter. When you use the task picker, it reads relevant Todoist task details to let you find and link tasks.
+        Horizons for Todoist provides year, month, week, and day planning inside Todoist. It processes goals, descriptions, preferences, and the Todoist task details needed to find and link tasks. It temporarily uses your Todoist session for approved API requests.
       </p>
       <p>
-        When the optional “Show day tasks in Todoist” setting is enabled (it is on by default), Horizons creates and maintains matching Inbox tasks for day goals. In that mode the extension may create, update, complete, reopen, and delete those Inbox twin tasks, and may add a short marker comment so the twin can be recognized. Turning the setting off stops new twin writes; existing Inbox twin tasks remain in your Todoist account until you delete them. Linking a Todoist task to a week, month, or year goal updates Horizons goal data and does not rewrite that task’s title or project.
+        When the optional “Also create day tasks in Inbox” setting is enabled (on by default), Horizons creates and maintains matching Inbox tasks for day-lane tasks. In that mode the extension may create, update, complete, reopen, and delete those Inbox twin tasks, and may add a short marker comment so the twin can be recognized. Turning the setting off stops new twin writes; existing Inbox twin tasks remain until you delete them. Linking a Todoist task to a week, month, or year goal updates Horizons goal data and does not rewrite that task’s title or project.
       </p>
       <p>
-        The extension also temporarily uses your Todoist session for API requests. If you contact us, the information you submit and, unless you opt out, technical diagnostics may be processed to respond or troubleshoot.
-      </p>
-      </section>
-
-      <section class="legal-section scroll-reveal">
-      <h2>2. Where Your Data is Stored</h2>
-      <p>
-        Your goals, settings, and preferences are stored in your browser using Chrome's extension storage (<code>chrome.storage.local</code>). If that API is unavailable, the extension can use page <code>localStorage</code> as a fallback. The Todoist session token is held temporarily in extension session storage.
+        When analytics is configured for a build, it is on. Analytics, error diagnostics, and session replay are sent to PostHog's EU service to understand use, investigate failures, and improve the extension. Analytics is separate from goal synchronization and backups. Turning sync, backups, or day-task twins off does not turn analytics off. <strong>There is no in-product analytics on/off switch.</strong>
       </p>
       <p>
-        Website theme and contact-form rate-limit preferences are stored in your browser's <code>localStorage</code>. The extension also stores its installation date locally to calculate an approximate days-installed value for the uninstall feedback page; only the extension version and calculated day count are included in that page's URL.
-      </p>
-      <p>
-        Website analytics also uses localStorage for generated visitor and session identifiers. Website and extension analytics use the same PostHog project, with events labeled by surface; this does not automatically link your website visits to your extension identity.
+        If you submit a support, contact, or feedback form, the information you choose to submit is processed to respond or improve the product.
       </p>
       </section>
 
       <section class="legal-section scroll-reveal">
-      <h2>3. Synchronization & Backups via Todoist</h2>
+      <h2>2. Local storage, synchronization, and backups</h2>
       <p>
-        Sync and backups are separate features, both enabled by default. When enabled, Horizons sends the necessary data over HTTPS directly to Todoist's API using your active Todoist session.
+        Goals, settings, preferences, and generated analytics identifiers are stored in your browser. Goal storage uses Chrome's extension storage (<code>chrome.storage.local</code>), with page <code>localStorage</code> as a fallback when that API is unavailable. The Todoist session token is held temporarily in extension session storage for approved Todoist requests.
+      </p>
+      <p>
+        Sync and backups are separate features, both enabled by default. When enabled, they send goal data over HTTPS to your Todoist account:
       </p>
       <ul>
-        <li>Synced goals are stored in a marked task in a separate project named "Horizons sync (do not delete)".</li>
-        <li>Backup snapshots are stored as comments on a separate task in that project. Automatic backups keep the 14 newest snapshots; manual backups remain until deleted.</li>
-        <li>Day-goal Inbox twins (when that setting is enabled) are ordinary Todoist Inbox tasks in your account, separate from the sync project above.</li>
+        <li>Synced goals are stored on an extension-managed task in a separate project named "Horizons sync (do not delete)".</li>
+        <li>Backup snapshots are stored as comments on a separate task in that project. Automatic backups retain the 14 newest snapshots; manual backups remain until you delete them.</li>
+        <li>Day-lane Inbox twins (when that setting is enabled) are ordinary Todoist Inbox tasks in your account, separate from the sync project above.</li>
       </ul>
       <p>
-        Horizons does not store your goals on a developer-operated server. JSON exports are saved wherever you choose on your device.
+        Horizons does not operate a separate goal synchronization or backup server. Visible page content is also transmitted to PostHog when analytics is configured, as described below. Local/Todoist goal storage must not be interpreted as a promise that page content never leaves those locations. JSON exports are saved wherever you choose on your device.
+      </p>
+      <p>
+        The extension stores its installation date locally. The uninstall feedback page URL contains only the extension version and approximate days installed. Website theme and contact-form rate-limit preferences are stored locally. Website analytics also uses localStorage for generated visitor and session identifiers. Website and extension analytics can share a PostHog project with events labeled by surface; that does not automatically link website visits to your extension identity.
       </p>
       </section>
 
       <section class="legal-section scroll-reveal">
-      <h2>4. Analytics and Session Replay</h2>
+      <h2>3. Analytics, errors, and session replay</h2>
       <p>
         This website uses PostHog's EU service to collect pageviews, traffic-source information, browser and device metadata, clicks and interactions, and session recordings. Recordings reproduce page structure, changes, scrolling, and interactions to help us understand use and improve the website. Install-button clicks and confirmed form submissions are tracked separately; an install-button click does not confirm an installation.
       </p>
       <p>
-        Website form input values are masked in recordings and excluded from automatic interaction capture. Names, email addresses, messages, and feedback text are not included in our custom analytics events. Network request and response bodies and headers, and console logs, are not recorded. Captured navigation URLs omit query strings and fragments; campaign attribution may be collected separately. Masking is not a guarantee that every possible piece of personal information on a page can be detected.
+        Website form input values are masked in recordings and excluded from automatic interaction capture. Names, email addresses, messages, and feedback text are not included in our custom website analytics events. Network request and response bodies and headers, and console logs, are not recorded. Captured navigation URLs omit query strings and fragments; campaign attribution may be collected separately. Masking is not a guarantee that every possible piece of personal information on a page can be detected.
       </p>
       <p>
-        The extension also sends enabled usage analytics, error diagnostics, and session recordings to PostHog. Its analytics toggle controls extension collection, not website collection. Extension recordings cover Todoist and extension pages with selective masking of goal names, recognized task and project names, and passwords; other visible content can remain in recordings. We do not sell your data. See <a href="https://posthog.com/privacy" target="_blank" rel="noopener">PostHog's privacy policy</a> for information about the provider.
-      </p>
-      </section>
-
-      <section class="legal-section scroll-reveal">
-      <h2>5. User-Initiated Support & Feedback</h2>
-      <p>
-        If you send us a message through the extension, we send your message, topic, and reply email (if provided) to Web3Forms so we can respond. Basic technical details are included by default to help us troubleshoot. You can turn this off before sending.
-      </p>
-      <p>
-        The website contact form sends your email, message, topic, and optional name to Web3Forms. After uninstalling, you can choose to send feedback through a survey. The survey includes your selected reason and any message or email you provide.
+        When analytics is configured, the extension also sends usage analytics, error diagnostics, and session recordings to PostHog. There is no in-product analytics on/off switch. Extension recordings cover the whole Todoist page on every route, plus extension popup, support, and feedback pages, with selective masking of Horizons goal names, recognized Todoist task titles, task-label and project names, sidebar project/favorite names, and passwords. Task descriptions, goal descriptions, ordinary inputs, and personal or workspace names can remain visible. We do not sell your data. See <a href="https://posthog.com/privacy" target="_blank" rel="noopener">PostHog's privacy policy</a>.
       </p>
       </section>
 
       <section class="legal-section scroll-reveal">
-      <h2>6. Data Retention and Deletion</h2>
+      <h2>4. Third-party services and sharing</h2>
+      <ul>
+        <li><strong>Todoist</strong> processes enabled goal synchronization and backup data in your account. See <a href="https://www.todoist.com/privacy" target="_blank" rel="noopener">Todoist's privacy policy</a>.</li>
+        <li><strong>PostHog</strong> processes analytics, error reports, and session recordings through its EU service when analytics is configured. See <a href="https://posthog.com/privacy" target="_blank" rel="noopener">PostHog's privacy policy</a>.</li>
+        <li><strong>Web3Forms</strong> processes user-submitted support, contact, and feedback forms. See <a href="https://web3forms.com/privacy" target="_blank" rel="noopener">Web3Forms' privacy policy</a>.</li>
+      </ul>
       <p>
-        Local extension data is removed when you uninstall the extension or clear its data in your browser. Uninstalling does not delete data already stored in Todoist.
+        We do not sell your data or use it for creditworthiness or lending decisions.
+      </p>
+      </section>
+
+      <section class="legal-section scroll-reveal">
+      <h2>5. User-initiated support and feedback</h2>
+      <p>
+        Extension support and feedback forms send your message, topic, and reply email (if provided) to Web3Forms. Basic technical diagnostics are included by default; you can turn them off before submitting. That choice applies only to the form submission, not to product analytics.
+      </p>
+      <p>
+        The website contact form sends your email, message, topic, and optional name. The optional uninstall survey sends your selected reason and any message or email you provide. Leaving a form without submitting does not submit a support request; when extension replay is active, ordinary form input values may still be present in recordings.
+      </p>
+      </section>
+
+      <section class="legal-section scroll-reveal">
+      <h2>6. Retention, controls, and deletion</h2>
+      <p>
+        Local extension data is removed when you uninstall the extension or clear its data in your browser. Uninstalling does not delete data already stored in Todoist or PostHog.
       </p>
       <ul>
-        <li>You can delete individual backups in the extension's Backup Manager or remove the Horizons project from Todoist.</li>
+        <li>You can delete individual backups in the extension's Backup Manager or remove the Horizons sync project from Todoist.</li>
         <li>Turning sync or backups off stops new writes but does not delete existing Todoist data. Automatic backups keep the 14 newest snapshots; manual backups remain until deleted.</li>
-        <li>Turning “Show day tasks in Todoist” off stops new Inbox twin writes but does not delete existing twin tasks; you can remove those tasks in Todoist like any other Inbox item.</li>
+        <li>Turning “Also create day tasks in Inbox” off stops new Inbox twin writes but does not delete existing twin tasks; you can remove those tasks in Todoist like any other Inbox item.</li>
+        <li>PostHog session replay retention is 30 days. Other analytics and exception retention follow the PostHog project settings (confirmed). Clearing browser storage or uninstalling does not delete data already sent to PostHog.</li>
         <li>Web3Forms processes submitted form data under its own privacy practices and retention policies.</li>
-        <li>Analytics and recordings are retained according to the PostHog project's settings. Clearing browser storage or uninstalling the extension does not delete data already sent to PostHog. Contact us regarding deletion requests.</li>
       </ul>
+      <p>
+        For questions about access or deletion of information processed by the maintainers, use the contact routes below. Do not assume uninstalling or changing a setting automatically requests deletion from a third-party service.
+      </p>
       </section>
 
       <section class="legal-section scroll-reveal">
-      <h2>7. Compliance & Changes</h2>
+      <h2>7. Changes</h2>
       <p>
-        We may update this Privacy Policy as the extension or its data practices change. Updates will be posted here with a revised date.
+        We may update this Privacy Policy as the extension or its data practices change. Updates will be posted here with a revised date. Store declarations and this live policy must match the extension's actual behavior.
       </p>
       </section>
 
